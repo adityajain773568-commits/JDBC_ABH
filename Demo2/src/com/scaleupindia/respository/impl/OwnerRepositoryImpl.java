@@ -1,11 +1,8 @@
 package com.scaleupindia.respository.impl;
 
 import com.scaleupindia.dto.OwnerDTO;
-import com.scaleupindia.enums.Gender;
-import com.scaleupindia.enums.PetType;
 import com.scaleupindia.exceptions.InternalServiceException;
 import com.scaleupindia.respository.OwnerRepository;
-import com.scaleupindia.util.InputUtil;
 import com.scaleupindia.util.MapperUtil;
 
 import java.sql.*;
@@ -13,7 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class OwnerRepositoryImpl implements OwnerRepository {
 
@@ -43,10 +39,9 @@ public class OwnerRepositoryImpl implements OwnerRepository {
                 + ownerDTO.getPetGender() + "', '"
                 + ownerDTO.getPetType() + "')";
 
-
         try {
             Class.forName(DATABASE_DRIVER);
-            System.out.println("yeeeeeeee -1 ");
+//            System.out.println("yeeeeeeee -1 ");
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
             statement = connection.createStatement();
             statement.executeUpdate(sql);
@@ -80,7 +75,6 @@ public class OwnerRepositoryImpl implements OwnerRepository {
         String sql = "select * from owner_table where id = " + ownerId;
 
         try {
-
             Class.forName(DATABASE_DRIVER);
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
             statement = connection.createStatement();
@@ -92,13 +86,12 @@ public class OwnerRepositoryImpl implements OwnerRepository {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
         return ownerDTO;
     }
 
     @Override
     public void updatePetDetails(int ownerId, String petName) {
-        String sql = "UPDATE owner_table SET pet_name = '" + petName +"' WHERE id = " + ownerId;
+        String sql = "UPDATE owner_table SET pet_name = '" + petName + "' WHERE id = " + ownerId;
         try {
             Class.forName(DATABASE_DRIVER);
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
@@ -108,32 +101,26 @@ public class OwnerRepositoryImpl implements OwnerRepository {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
+            if (Objects.nonNull(statement)) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             if (Objects.nonNull(connection)) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-
-                if (Objects.nonNull(statement)) {
-
-
-                    try {
-                        statement.close();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-
-
-                }
             }
         }
-
     }
 
     @Override
     public void deleteOwner(int ownerId) {
-        String sql = "Delete from owner_table  where id = " + ownerId ;
+        String sql = "Delete from owner_table  where id = " + ownerId;
         try {
             Class.forName(DATABASE_DRIVER);
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
@@ -143,23 +130,18 @@ public class OwnerRepositoryImpl implements OwnerRepository {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
+            if (Objects.nonNull(statement)) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             if (Objects.nonNull(connection)) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
-                }
-
-                if (Objects.nonNull(statement)) {
-
-
-                    try {
-                        statement.close();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-
-
                 }
             }
         }
@@ -167,12 +149,10 @@ public class OwnerRepositoryImpl implements OwnerRepository {
 
     @Override
     public List<OwnerDTO> findAllOwners() {
-        List<OwnerDTO> ownerDTOList =new ArrayList<>();
+        List<OwnerDTO> ownerDTOList = new ArrayList<>();
         OwnerDTO ownerDTO = null;
         String sql = "select * from owner_table ";
-
         try {
-
             Class.forName(DATABASE_DRIVER);
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
             statement = connection.createStatement();
@@ -184,9 +164,23 @@ public class OwnerRepositoryImpl implements OwnerRepository {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        }finally {
+            if (Objects.nonNull(statement)) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (Objects.nonNull(connection)) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
-
-        return ownerDTOList ;
+        return ownerDTOList;
     }
 
     @Override
@@ -196,9 +190,7 @@ public class OwnerRepositoryImpl implements OwnerRepository {
                 + petDateOfBirth + "'";
         System.out.println(sql);
         OwnerDTO ownerDTO = null;
-
         try {
-
             Class.forName(DATABASE_DRIVER);
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
             statement = connection.createStatement();
@@ -209,8 +201,22 @@ public class OwnerRepositoryImpl implements OwnerRepository {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        }finally {
+            if (Objects.nonNull(statement)) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (Objects.nonNull(connection)) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
-
         return ownerDTO;
     }
 }

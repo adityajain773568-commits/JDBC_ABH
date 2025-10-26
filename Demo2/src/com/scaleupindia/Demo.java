@@ -1,14 +1,11 @@
 package com.scaleupindia;
 
 import com.scaleupindia.dto.OwnerDTO;
-import com.scaleupindia.exceptions.DuplicateOwnerException;
-import com.scaleupindia.exceptions.OwnerNotFoundException;
 import com.scaleupindia.service.OwnerService;
 import com.scaleupindia.service.impl.OwnerServiceImpl;
 import com.scaleupindia.util.InputUtil;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
