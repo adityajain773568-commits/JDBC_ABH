@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class OwnerRepositoryImpl implements OwnerRepository {
-    private static List<OwnerDTO> ownerDTOList;
+    private static final List<OwnerDTO> ownerDTOList;
 
     static {
         ownerDTOList = new ArrayList<>();

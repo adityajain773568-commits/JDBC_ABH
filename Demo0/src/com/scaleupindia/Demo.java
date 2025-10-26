@@ -62,11 +62,8 @@ public class Demo {
                         break;
 
                     //default case
-
-
-
-
-
+                    default:
+                        break;
 
                 }
 

@@ -16,7 +16,7 @@ public class InputUtil {
     public static int acceptMenuOption(Scanner scanner){
         System.out.println("Press 1 to add new Owner. ");
         System.out.println("Press 2 to fetch owner details.");
-        System.out.println("Press 3 to updated pet details of owner.");
+        System.out.println("Press 3 to update pet details of owner.");
         System.out.println("Press 4 to delete owner details.");
         System.out.println("Press 5 to fetch all owners.");
 
@@ -44,11 +44,13 @@ public class InputUtil {
         String firstName = scanner.next();
         System.out.println("Enter last name of owner : ");
         String lastName = scanner.next();
-        System.out.println("Enter gender of Owner : " + Arrays.asList(Gender.values()).toString());
+        System.out.println("Enter gender of Owner : " + Arrays.asList(Gender.values()));
         String gender = scanner.next().toUpperCase();
         System.out.println("Enter city of owner : ");
         String city = scanner.next();
-        System.out.println("Enter state of owner");
+        System.out.println("Enter state of owner : ");
+        String state = scanner.next();
+        System.out.println("Enter Mobile Number of Owner : ");
         String mobileNumber = scanner.next();
         System.out.println("Enter email id of owner : ");
         String emailId = scanner.next();
@@ -60,7 +62,7 @@ public class InputUtil {
         String petDateOfBirth = scanner.next();
         System.out.println("Enter gender of pet : " + Arrays.toString(Gender.values()));
         String petGender = scanner.next().toUpperCase();
-        System.out.println("Enter pet type : " + Arrays.asList(PetType.values()).toString());
+        System.out.println("Enter pet type : " + Arrays.asList(PetType.values()));
         String petType = scanner.next().toUpperCase();
         try {
             OwnerDTO ownerDTO = new OwnerDTO();
@@ -69,6 +71,7 @@ public class InputUtil {
             ownerDTO.setLastName(lastName);
             ownerDTO.setGender(Gender.valueOf(gender));
             ownerDTO.setCity(city);
+            ownerDTO.setState(state);
             ownerDTO.setMobileNumber(mobileNumber);
             ownerDTO.setEmailId(emailId);
             ownerDTO.setPetId(petId);

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class OwnerServiceImpl implements OwnerService {
-    private OwnerRepository ownerRepository;
+    private final OwnerRepository ownerRepository;
     private static final String OWNER_ALREADY_EXISTS = "Owner already exists with ownerId ";
     private static final String OWNER_NOT_FOUND= "Can't find owner with ownerId ";
 
