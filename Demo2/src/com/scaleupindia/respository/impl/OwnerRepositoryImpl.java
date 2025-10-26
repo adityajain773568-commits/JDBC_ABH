@@ -41,7 +41,6 @@ public class OwnerRepositoryImpl implements OwnerRepository {
 
         try {
             Class.forName(DATABASE_DRIVER);
-//            System.out.println("yeeeeeeee -1 ");
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
             statement = connection.createStatement();
             statement.executeUpdate(sql);

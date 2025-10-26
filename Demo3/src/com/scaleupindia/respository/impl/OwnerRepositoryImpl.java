@@ -1,11 +1,7 @@
 package com.scaleupindia.respository.impl;
 
 import com.scaleupindia.dto.OwnerDTO;
-import com.scaleupindia.enums.Gender;
-import com.scaleupindia.enums.PetType;
-import com.scaleupindia.exceptions.InternalServiceException;
 import com.scaleupindia.respository.OwnerRepository;
-import com.scaleupindia.util.InputUtil;
 import com.scaleupindia.util.MapperUtil;
 
 import java.sql.*;
@@ -13,7 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class OwnerRepositoryImpl implements OwnerRepository {
 
@@ -36,7 +31,7 @@ public class OwnerRepositoryImpl implements OwnerRepository {
             Class.forName(DATABASE_DRIVER);
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
+
             preparedStatement.setInt(1, ownerDTO.getId());
             preparedStatement.setString(2, ownerDTO.getFirstName());
             preparedStatement.setString(3, ownerDTO.getLastName());
@@ -50,8 +45,8 @@ public class OwnerRepositoryImpl implements OwnerRepository {
             preparedStatement.setDate(11, Date.valueOf(ownerDTO.getPetBirthDate()));
             preparedStatement.setString(12, ownerDTO.getPetGender().toString());
             preparedStatement.setString(13, ownerDTO.getPetType().toString());
-
-            System.out.println(sql);
+            preparedStatement.executeUpdate();
+//            System.out.println(sql);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -65,7 +60,6 @@ public class OwnerRepositoryImpl implements OwnerRepository {
                 throw new RuntimeException(e);
 
             }
-
             try {
                 if (Objects.nonNull(connection)) {
                     connection.close();
@@ -76,7 +70,6 @@ public class OwnerRepositoryImpl implements OwnerRepository {
 
             }
         }
-
     }
 
     @Override
@@ -124,9 +117,9 @@ public class OwnerRepositoryImpl implements OwnerRepository {
             Class.forName(DATABASE_DRIVER);
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
             preparedStatement.setString(1, petName);
             preparedStatement.setInt(2, ownerId);
+            preparedStatement.executeUpdate();
 
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);

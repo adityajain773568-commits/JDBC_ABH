@@ -10,10 +10,9 @@ import com.scaleupindia.service.OwnerService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class OwnerServiceImpl implements OwnerService {
-    private OwnerRepository ownerRepository;
+    private final OwnerRepository ownerRepository;
     private static final String OWNER_ALREADY_EXISTS = "Owner already exists with ownerId ";
     private static final String OWNER_NOT_FOUND= "Can't find owner with ownerId ";
 
@@ -71,7 +70,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public OwnerDTO findOwnerUsingEmailAndDate(String emailId, LocalDate petDateOfBirth) {
-        OwnerDTO ownerDTO = ownerRepository.findOwnerUsingEmailIdAndDate( emailId,  petDateOfBirth);
+        OwnerDTO ownerDTO = ownerRepository.findOwnerUsingEmailIdAndDate( emailId, petDateOfBirth);
         if (Objects.isNull(ownerDTO)){
             throw new RuntimeException();
         }else {
