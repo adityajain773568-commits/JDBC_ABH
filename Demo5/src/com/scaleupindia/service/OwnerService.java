@@ -1,0 +1,16 @@
+package com.scaleupindia.service;
+
+import com.scaleupindia.dto.OwnerDTO;
+import com.scaleupindia.exceptions.DuplicateOwnerException;
+import com.scaleupindia.exceptions.OwnerNotFoundException;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public interface OwnerService {
+    void saveOwnersAutomatically(List<OwnerDTO> ownerDTOS);
+
+    void saveOwnersManually(List<OwnerDTO> ownerDTOS);
+
+    void saveOwnersManuallyWithSavepoint(List<OwnerDTO> ownerDTOS);
+}

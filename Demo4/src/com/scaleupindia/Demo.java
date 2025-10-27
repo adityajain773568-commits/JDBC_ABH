@@ -1,6 +1,7 @@
 package com.scaleupindia;
 
 import com.scaleupindia.dto.OwnerDTO;
+import com.scaleupindia.enums.PetType;
 import com.scaleupindia.exceptions.DuplicateOwnerException;
 import com.scaleupindia.exceptions.OwnerNotFoundException;
 import com.scaleupindia.service.OwnerService;
@@ -25,56 +26,25 @@ public class Demo {
                 int menuOption = InputUtil.acceptMenuOption(scanner);
 
                 switch (menuOption){
-                    //save owner first time
+                    //find pet owners using pet type
                     case 1:
-
-                        OwnerDTO ownerDTO = InputUtil.acceptOwnerDetailToSave(scanner);
-                        ownerService.saveOwner(ownerDTO);
-                        System.out.println("Owner has been saved successfully.");
-                        break;
-
-                    //fetch owner details
-                    case 2:
-                        int ownerId = InputUtil.acceptOwnerIdToOperate(scanner);
-                        ownerDTO = ownerService.findOwner(ownerId);
-                        System.out.println("Owner has been fetched successfully.");
-                        System.out.println(ownerDTO);
-                        break;
-
-                    //Update details
-                    case 3:
-                        ownerId = InputUtil.acceptOwnerIdToOperate(scanner);
-                        String petName = InputUtil.acceptPetDetailsToUpdate(scanner);
-                        ownerService.updatePetDetails(ownerId,petName);
-                        System.out.println("Pet Details of owner have been updated successfully.");
-                        break;
-
-                    //delete owner
-                    case 4:
-                        ownerId = InputUtil.acceptOwnerIdToOperate(scanner);
-                        ownerService.deleteOwner(ownerId);
-                        System.out.println("Owner has been deleted successfully.");
-                        break;
-
-                    //find all owners
-                    case 5:
-                        List<OwnerDTO> ownerDTOList = ownerService.findAllOwners();
-                        System.out.println("There are " + ownerDTOList.size() + " owners.");
+                        PetType petType = InputUtil.acceptPetTypeToOperate(scanner);
+                        List<OwnerDTO> ownerDTOList = ownerService.findOwners(petType);
+                        System.out.println("There are " + ownerDTOList.size() + " owners with the pet type as " + petType);
                         ownerDTOList.forEach(System.out::println);
                         break;
 
-
-                    case 6:
-                        String emailId = InputUtil.acceptEmailIdToOperate(scanner);
-                        LocalDate pet_date_of_birth = InputUtil.acceptDateToOperate(scanner);
-                        ownerDTO = ownerService.findOwnerUsingEmailAndDate( emailId , pet_date_of_birth);
-                        System.out.println("Owner has been fetched successfully.");
-                        System.out.println(ownerDTO);
-
+                    //update pet details
+                    case 2:
+                         petType = InputUtil.acceptPetTypeToOperate(scanner);
+                         ownerDTOList = ownerService.updatePetDetails(petType,InputUtil.wantToUseCallable(scanner));
+                        System.out.println("Updated details of "+ownerDTOList.size() + " pets with pet type as " + petType);
+                        ownerDTOList.forEach(System.out::println);
+                        break;
 
                     //default case
                     default:
-                        System.out.println("Enter number from 1 to 6");
+                        System.out.println("Invalid option entered!");
                         break;
 
 

@@ -1,6 +1,7 @@
 package com.scaleupindia.service.impl;
 
 import com.scaleupindia.dto.OwnerDTO;
+import com.scaleupindia.enums.PetType;
 import com.scaleupindia.exceptions.DuplicateOwnerException;
 import com.scaleupindia.exceptions.OwnerNotFoundException;
 import com.scaleupindia.respository.OwnerRepository;
@@ -31,26 +32,17 @@ public class OwnerServiceImpl implements OwnerService {
         }
     }
 
-    @Override
-    public OwnerDTO findOwner(int ownerId) throws OwnerNotFoundException {
-        OwnerDTO ownerDTO = ownerRepository.findOwner(ownerId);
-        if (Objects.isNull(ownerDTO)){
-            throw new OwnerNotFoundException(OWNER_NOT_FOUND + ownerId);
 
+
+    @Override
+    public List<OwnerDTO> updatePetDetails(PetType petType, boolean useCallable) throws OwnerNotFoundException {
+        if (useCallable){
+            return ownerRepository.updatePetDetailsWithCallable(petType.toString());
         }else {
-            return ownerDTO;
+            return ownerRepository.updatePetDetailsWithoutCallable(petType.toString());
         }
     }
 
-    @Override
-    public void updatePetDetails(int ownerId, String petName) throws OwnerNotFoundException {
-        OwnerDTO ownerDTO = ownerRepository.findOwner(ownerId);
-        if (Objects.isNull(ownerDTO)){
-            throw new OwnerNotFoundException(OWNER_NOT_FOUND + ownerId);
-        }else {
-            ownerRepository.updatePetDetails(ownerId,petName);
-        }
-    }
 
     @Override
     public void deleteOwner(int ownerId) throws OwnerNotFoundException {
@@ -76,5 +68,10 @@ public class OwnerServiceImpl implements OwnerService {
         }else {
             return ownerDTO;
         }
+    }
+
+    @Override
+    public List<OwnerDTO> findOwners(PetType petType) {
+        return ownerRepository.findOwners(petType.toString());
     }
 }

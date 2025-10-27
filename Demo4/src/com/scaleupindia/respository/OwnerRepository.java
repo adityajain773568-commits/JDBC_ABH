@@ -4,14 +4,14 @@ import com.scaleupindia.dto.OwnerDTO;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface OwnerRepository {
     void saveOwner(OwnerDTO ownerDTO) throws ClassNotFoundException;
 
     OwnerDTO findOwner(int ownerId);
 
-    void updatePetDetails(int ownerId , String petName);
+    List<OwnerDTO> updatePetDetailsWithCallable(String petType);
+    List<OwnerDTO> updatePetDetailsWithoutCallable(String petType);
 
     void deleteOwner(int ownerId);
 
@@ -19,4 +19,5 @@ public interface OwnerRepository {
 
     OwnerDTO findOwnerUsingEmailIdAndDate(String emailId, LocalDate petDateOfBirth);
 
+    List<OwnerDTO> findOwners(String petType);
 }

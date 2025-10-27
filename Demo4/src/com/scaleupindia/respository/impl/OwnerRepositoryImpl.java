@@ -1,6 +1,7 @@
 package com.scaleupindia.respository.impl;
 
 import com.scaleupindia.dto.OwnerDTO;
+import com.scaleupindia.exceptions.InternalServiceException;
 import com.scaleupindia.respository.OwnerRepository;
 import com.scaleupindia.util.MapperUtil;
 
@@ -109,32 +110,38 @@ public class OwnerRepositoryImpl implements OwnerRepository {
         return ownerDTO;
     }
 
-
     @Override
-    public void updatePetDetails(int ownerId, String petName) {
-        String sql = "UPDATE owner_table SET pet_name = ? WHERE id = ? ";
+    public List<OwnerDTO> updatePetDetailsWithCallable(String petType) {
+        String sql = "CALL add_prefix_to_pet_name(?)";
+        Connection connection = null;
+        OwnerDTO ownerDTO = null;
+        List<OwnerDTO> ownerDTOList = new ArrayList<>();
+        CallableStatement callableStatement = null;
         try {
+            // Load database driver
             Class.forName(DATABASE_DRIVER);
+
+            // Establish connection
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, petName);
-            preparedStatement.setInt(2, ownerId);
-            preparedStatement.executeUpdate();
-
+            callableStatement = connection.prepareCall(sql);
+            callableStatement.setString(1,petType);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()){
+                ownerDTO = MapperUtil.convertOwnerResultSetToDTO(resultSet);
+                ownerDTOList.add(ownerDTO);
+            }
         } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new InternalServiceException(e.getMessage());
         } finally {
-
             try {
-                if (Objects.nonNull(preparedStatement)) {
-                    preparedStatement.close();
+                if (Objects.nonNull(callableStatement)) {
+                    callableStatement.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
-
             }
-
             try {
                 if (Objects.nonNull(connection)) {
                     connection.close();
@@ -142,10 +149,70 @@ public class OwnerRepositoryImpl implements OwnerRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
-
             }
         }
+
+        return ownerDTOList;
     }
+
+    @Override
+    public List<OwnerDTO> updatePetDetailsWithoutCallable(String petType) {
+        String updateSql = """ 
+                UPDATE owner_table
+                                  SET pet_name = CASE pet_gender
+                                      WHEN 'M' THEN CONCAT('Mr.', pet_name)
+                                      WHEN 'F' THEN CONCAT('Miss', pet_name)
+                                      ELSE pet_name
+                                  END
+                                  WHERE pet_type = ?;
+                """;
+        String readSql = "SELECT * FROM owner_table WHERE pet_type = ?";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        OwnerDTO ownerDTO = null;
+        List<OwnerDTO> ownerDTOList = new ArrayList<>();
+        try {
+            // Load database driver
+            Class.forName(DATABASE_DRIVER);
+
+            // Establish connection
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASS);
+            preparedStatement = connection.prepareStatement(updateSql);
+            preparedStatement.setString(1,petType);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(readSql);
+            preparedStatement.setString(1,petType);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                ownerDTO = MapperUtil.convertOwnerResultSetToDTO(resultSet);
+                ownerDTOList.add(ownerDTO);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            throw new InternalServiceException(e.getMessage());
+        } finally {
+            try {
+                if (Objects.nonNull(preparedStatement)) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+            try {
+                if (Objects.nonNull(connection)) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+
+        return ownerDTOList;
+    }
+
 
     @Override
     public void deleteOwner(int ownerId) {
@@ -256,5 +323,42 @@ public class OwnerRepositoryImpl implements OwnerRepository {
         }
         return ownerDTO;
 
+    }
+
+    @Override
+    public List<OwnerDTO> findOwners(String petType) {
+        String sql = "Select * from owner_table where pet_type = ?";
+        List<OwnerDTO> ownerDTOList = new ArrayList<>();
+        OwnerDTO ownerDTO = null;
+        try {
+            Class.forName(DATABASE_DRIVER);
+            connection = DriverManager.getConnection(DATABASE_URL,DATABASE_USERNAME,DATABASE_PASS);
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,petType);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                ownerDTO = MapperUtil.convertOwnerResultSetToDTO(resultSet);
+                ownerDTOList.add(ownerDTO);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (Objects.nonNull(preparedStatement)){
+                    preparedStatement.close();
+                }
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+            try {
+                if (Objects.nonNull(connection)){
+                    connection.close();
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return ownerDTOList;
     }
 }
