@@ -20,7 +20,7 @@ public class InputUtil {
         System.out.println("Press 3 to updated pet details of owner.");
         System.out.println("Press 4 to delete owner details.");
         System.out.println("Press 5 to fetch all owners.");
-        System.out.println("Press 6 to fetch owner details by owner email id  and pet date of birth.");
+        System.out.println("Press 6 to Update pet details as per the pet type. ");
 
         int menuOption = scanner.nextInt();
 
@@ -87,42 +87,25 @@ public class InputUtil {
             System.out.println(e.getMessage());
             return acceptOwnerDetailToSave(scanner);
         }
-
-
     }
 
     public static LocalDate convertStringToDate(String stringDate) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return LocalDate.parse(stringDate,format);
-
     }
-
 
     public static int acceptOwnerIdToOperate(Scanner scanner) {
         System.out.println("Enter id of owner : ");
         return  scanner.nextInt();
     }
 
-
     public static String acceptPetDetailsToUpdate(Scanner scanner) {
         System.out.println("Enter pet name to update : ");
         return scanner.next();
     }
 
-    public static String acceptEmailIdToOperate(Scanner scanner) {
-        System.out.println("Enter emailId of owner : ");
-//        scanner.nextLi();
-        return scanner.next();
-    }
-
-    public static LocalDate acceptDateToOperate(Scanner scanner) {
-        System.out.println("Enter pet date of birth to operate : ");
-
-        return convertStringToDate2(scanner.next());
-    }
-
-    private static LocalDate convertStringToDate2(String stringDate) {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(stringDate,format);
+    public static PetType acceptPetTypeToOperate(Scanner scanner) {
+        System.out.println("Enter pet type : " + Arrays.asList(PetType.values()));
+        return PetType.valueOf(scanner.next().toUpperCase().trim());
     }
 }

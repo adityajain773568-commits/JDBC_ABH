@@ -1,6 +1,7 @@
 package com.scaleupindia.service.impl;
 
 import com.scaleupindia.dto.OwnerDTO;
+import com.scaleupindia.enums.PetType;
 import com.scaleupindia.exceptions.DuplicateOwnerException;
 import com.scaleupindia.exceptions.OwnerNotFoundException;
 import com.scaleupindia.respository.OwnerRepository;
@@ -69,12 +70,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public OwnerDTO findOwnerUsingEmailAndDate(String emailId, LocalDate petDateOfBirth) {
-        OwnerDTO ownerDTO = ownerRepository.findOwnerUsingEmailIdAndDate( emailId, petDateOfBirth);
-        if (Objects.isNull(ownerDTO)){
-            throw new RuntimeException();
-        }else {
-            return ownerDTO;
-        }
+    public List<OwnerDTO> updatePetDetails(PetType petType) {
+        return ownerRepository.updatePetDetails(petType.toString());
     }
 }

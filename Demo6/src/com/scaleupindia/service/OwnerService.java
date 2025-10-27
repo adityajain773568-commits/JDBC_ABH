@@ -1,6 +1,7 @@
 package com.scaleupindia.service;
 
 import com.scaleupindia.dto.OwnerDTO;
+import com.scaleupindia.enums.PetType;
 import com.scaleupindia.exceptions.DuplicateOwnerException;
 import com.scaleupindia.exceptions.OwnerNotFoundException;
 
@@ -18,5 +19,5 @@ public interface OwnerService {
 
     List<OwnerDTO> findAllOwners();
 
-    OwnerDTO findOwnerUsingEmailAndDate(String emailId, LocalDate petDateOfBirth);
+    List<OwnerDTO> updatePetDetails(PetType petType);
 }

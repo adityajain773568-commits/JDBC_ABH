@@ -1,6 +1,7 @@
 package com.scaleupindia;
 
 import com.scaleupindia.dto.OwnerDTO;
+import com.scaleupindia.enums.PetType;
 import com.scaleupindia.exceptions.DuplicateOwnerException;
 import com.scaleupindia.exceptions.OwnerNotFoundException;
 import com.scaleupindia.service.OwnerService;
@@ -65,12 +66,11 @@ public class Demo {
 
 
                     case 6:
-                        String emailId = InputUtil.acceptEmailIdToOperate(scanner);
-                        LocalDate pet_date_of_birth = InputUtil.acceptDateToOperate(scanner);
-                        ownerDTO = ownerService.findOwnerUsingEmailAndDate( emailId , pet_date_of_birth);
-                        System.out.println("Owner has been fetched successfully.");
-                        System.out.println(ownerDTO);
-
+                        PetType petType = InputUtil.acceptPetTypeToOperate(scanner);
+                        ownerDTOList = ownerService.updatePetDetails(petType);
+                        System.out.println("Updated details of " + ownerDTOList.size() + " pets with pet type as " + petType);
+                        ownerDTOList.forEach(System.out::println);
+                        break;
 
                     //default case
                     default:

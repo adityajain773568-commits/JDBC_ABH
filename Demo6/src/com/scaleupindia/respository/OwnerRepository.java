@@ -17,6 +17,6 @@ public interface OwnerRepository {
 
     List<OwnerDTO> findAllOwners();
 
-    OwnerDTO findOwnerUsingEmailIdAndDate(String emailId, LocalDate petDateOfBirth);
+    List<OwnerDTO> updatePetDetails(String petType);
 
 }
